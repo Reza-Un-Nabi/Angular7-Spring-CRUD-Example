@@ -14,46 +14,44 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.angularSpring.demo.entity.Employee;
 import com.angularSpring.demo.repository.EmployeeRepository;
+import com.angularSpring.demo.service.EmployeeService;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
 public class EmployeeController {
 	
 	@Autowired
-	private EmployeeRepository employeeRepository;
+	private EmployeeService emplService;
 	
 	@PostMapping("/employees")
 	void addEmployee (@RequestBody Employee employee) {
 		
-		
-		employeeRepository.save(employee);
+		emplService.saveEmployeeInfo(employee);
 	} 
 	
 	
 	@GetMapping("/all-employee")
 	public List<Employee> getAllEmployee() {
 		
-		return (List<Employee>) employeeRepository.findAll();
+		return (List<Employee>) emplService.getAllEmployeeInfo();
 	}
 	
 	@DeleteMapping("/delete-employee/{id}")
 	 void deleteEmployee(@PathVariable("id")int id,Employee employee) {
 		
-		employee.setId(id);
-		employeeRepository.delete(employee);
+		//employee.setId(id);
+		emplService.deleteEmployeeInfo(employee);
 	}
 
 	@GetMapping("/getEmployee/{id}")
 	public List<Employee> getEmployeeById(@PathVariable("id")int id,Employee employee){
 		
-		employee.setId(id);
-		return employeeRepository.findByEmployeeId(id);
+		return emplService.getEmployeeInfoById(id);
 	}
 	
 	@PostMapping("updateEmployee/{id}")
 	public void updateEmployee (@RequestBody Employee employee,@PathVariable("id")int id) {
 		
-		employeeRepository.updateEmployee(employee.getFirstName(),employee.getLastName(), 
-				employee.getDesignation(), employee.getSalary(), id);
+		emplService.updateEmployeeInfo(employee,id);
 	}
 }
